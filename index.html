@@ -636,6 +636,19 @@ function updateMediaSession(){
 
 
 /* ===========================================================
+   EXPORT STUBS（軽量版では無効化）
+=========================================================== */
+function blobToBase64(blob){return Promise.resolve('');}
+function openExportSheet(){showToast('この軽量版ではエクスポート非対応です');}
+function closeExportSheet(){
+  const bd=document.getElementById('sheetBackdrop');
+  const sh=document.getElementById('sheet');
+  if(bd)bd.classList.remove('show');
+  if(sh)sh.classList.remove('show');
+}
+async function doExport(){showToast('この軽量版ではエクスポート非対応です');}
+
+/* ===========================================================
    EVENT LISTENERS
 =========================================================== */
 playBtn.addEventListener('click', togglePlay);
