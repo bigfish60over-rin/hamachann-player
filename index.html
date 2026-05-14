@@ -726,9 +726,12 @@ window.addEventListener('resize', () => { if (typeof resizeCanvas === 'function'
   
   setLoading(false);
   render();
-  setupCanvas();
-  drawEQ();
   if (state.tracks.length > 0) loadTrack(0, false);
+  // キャンバスはDOMが確定してから初期化
+  requestAnimationFrame(() => {
+    setupCanvas();
+    drawEQ();
+  });
 })();
 
 </script>
