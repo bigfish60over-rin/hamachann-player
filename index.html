@@ -720,19 +720,21 @@ window.addEventListener('resize', () => { if (typeof resizeCanvas === 'function'
   
   await openDB();
   
-  // DBに既存トラックがあれば優先
-  const existing = await dbGetAll();
-  if (existing && existing.length > 0) {
-    for (const t of existing) {
-      const url = URL.createObjectURL(t.blob);
-      state.tracks.push({id: t.id, name: t.name, blob: t.blob, url, duration: t.duration});
-    }
-  } else {
-    // プリセットトラックを外部ファイルから読み込む
-    for (const t of PRESET_TRACKS) {
-      state.tracks.push(t);
-    }
+  // プリセット12曲を常に表示
+  for (const t of PRESET_TRACKS) {
+    state.tracks.push(t);
   }
+  
+  // 追加でDBに保存された曲があれば後ろに追加
+  try {
+    const existing = await dbGetAll();
+    if (existing && existing.length > 0) {
+      for (const t of existing) {
+        const url = URL.createObjectURL(t.blob);
+        state.tracks.push({id: t.id, name: t.name, blob: t.blob, url, duration: t.duration});
+      }
+    }
+  } catch(e) { console.warn('DB read failed', e); }
   
   setLoading(false);
   render();
